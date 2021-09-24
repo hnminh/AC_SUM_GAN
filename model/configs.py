@@ -2,6 +2,7 @@ import argparse
 from pathlib import Path
 import pprint
 import math
+import json
 
 save_dir = Path('exp1')
 
@@ -42,35 +43,40 @@ def str2bool(v):
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
-def get_config(parse=True, **optional_kwargs):
+def get_config(parse=False, **optional_kwargs):
     '''
     Get configurations as attributes of class
     1. Parse configurations with argparse.
     2. Create Config class initialized with parsed kwargs.
     3. Return Config class.
     '''
+
+    # Load default parameters from file
+    with open('model/default_params.json', 'r') as f:
+        default_params = json.load(f)
+
     parser = argparse.ArgumentParser()
 
     # Mode
-    parser.add_argument('--mode', type=str, default='train')
-    parser.add_argument('--verbose', type=str2bool, default='false')
-    parser.add_argument('--video_type', type=str, default='TVSum')
+    parser.add_argument('--mode', type=str, default=default_params['mode'])
+    parser.add_argument('--verbose', type=str2bool, default=default_params['verbose'])
+    parser.add_argument('--video_type', type=str, default=default_params['video_type'])
 
     # Model
-    parser.add_argument('--input_size', type=int, default=1024)
-    parser.add_argument('--hidden_size', type=int, default=512)
-    parser.add_argument('--num_layers', type=int, default=2)
-    parser.add_argument('--regularization_factor', type=float, default=0.5)
-    parser.add_argument('--entropy_coef', type=float, default=0.1)
+    parser.add_argument('--input_size', type=int, default=default_params['input_size'])
+    parser.add_argument('--hidden_size', type=int, default=default_params['hidden_size'])
+    parser.add_argument('--num_layers', type=int, default=default_params['num_layers'])
+    parser.add_argument('--regularization_factor', type=float, default=default_params['regularization_factor'])
+    parser.add_argument('--entropy_coef', type=float, default=default_params['entropy_coef'])
 
     # Train
-    parser.add_argument('--n_epochs', type=int, default=100)
-    parser.add_argument('--batch_size', type=int, default=40)
-    parser.add_argument('--clip', type=float, default=5.0)
-    parser.add_argument('--lr', type=float, default=1e-4)
-    parser.add_argument('--discriminator_lr', type=float, default=1e-5)
-    parser.add_argument('--split_index', type=int, default=0)
-    parser.add_argument('--action_state_size', type=int, default=60)
+    parser.add_argument('--n_epochs', type=int, default=default_params['n_epochs'])
+    parser.add_argument('--batch_size', type=int, default=default_params['batch_size'])
+    parser.add_argument('--clip', type=float, default=default_params['clip'])
+    parser.add_argument('--lr', type=float, default=default_params['lr'])
+    parser.add_argument('--discriminator_lr', type=float, default=default_params['discriminator_lr'])
+    parser.add_argument('--split_index', type=int, default=default_params['split_index'])
+    parser.add_argument('--action_state_size', type=int, default=default_params['action_state_size'])
     
     if parse:
         kwargs = parser.parse_args()

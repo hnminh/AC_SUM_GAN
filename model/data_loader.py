@@ -52,8 +52,9 @@ class VideoData(Dataset):
             return frame_features, self.action_fragments[video_name]
 
 class CustomVideoData(Dataset):
-    def __init__(self, rootpath, action_state_size):
-        self.filename = rootpath
+    def __init__(self, mode, filepath, action_state_size):
+        self.mode = mode
+        self.filename = filepath
 
         hdf = h5py.File(self.filename, 'r')
         self.keys = list(hdf)
@@ -72,15 +73,27 @@ class CustomVideoData(Dataset):
         self.len = len(self.keys)
         return self.len
 
+    # In "train" mode it returns the features and the action_fragments
+    # In "test" mode it also returns the video_name
     def __getitem__(self, index):
         video_name = self.keys[index]  # gets the current video name
         frame_features = self.list_features[index]
 
-        return frame_features, video_name, self.action_fragments[video_name]
+        if self.mode == 'test':
+            return frame_features, video_name, self.action_fragments[video_name]
+        else:
+            return frame_features, self.action_fragments[video_name]
 
 def get_loader(name, mode, split_index, action_state_size):
+    vd = VideoData(name, mode, split_index, action_state_size)
     if mode.lower() == 'train':
-        vd = VideoData(name, mode, split_index, action_state_size)
         return DataLoader(vd, batch_size=1, shuffle=True)
     else:
-        return VideoData(name, mode, split_index, action_state_size)
+        return vd
+
+def get_loader_custom_video_data(mode, save_path, action_state_size):
+    vd = CustomVideoData(mode, save_path, action_state_size)
+    if mode.lower() == 'train':
+        return DataLoader(vd, batch_size=1, shuffle=True)
+    else:
+        return vd

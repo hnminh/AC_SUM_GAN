@@ -1,6 +1,6 @@
 import os
 from tqdm import tqdm
-from networks import ResNet
+from feature_extraction.networks import ResNet
 import numpy as np
 import h5py
 import decord
@@ -127,11 +127,4 @@ class GenerateDataset:
         self.h5_file.close()
 
 if __name__ == '__main__':
-
-    # without args
-    video_path = 'custom_video/original'
-    save_path = 'data/custom/custom_video.h5'
-
-    gen_data = GenerateDataset(video_path, save_path)
-
-    gen_data.generate_dataset()
+    pass
