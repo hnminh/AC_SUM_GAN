@@ -48,8 +48,15 @@ def generate_video(score_path, metadata_path, video_path):
             video_name = hdf[video_key + '/video_name'][()].decode()
             audio_name = video_name[:-4] + '.mp3'   # change the extension from mp4 to mp3
 
-            video_reader = decord.VideoReader(os.path.join(video_path, video_name))
-            audio_reader = AudioSegment.from_file(os.path.join(video_path, video_name), 'mp4')
+            # make sure that the system can works properly
+            # with both directory and single file
+            if os.path.isdir(video_path):
+                tmp_path = os.path.join(video_path, video_name)
+            else:
+                tmp_path = video_path
+
+            video_reader = decord.VideoReader(tmp_path)
+            audio_reader = AudioSegment.from_file(tmp_path, 'mp4')
 
             fps = video_reader.get_avg_fps()
             (frame_height, frame_width, _) = video_reader[0].asnumpy().shape
