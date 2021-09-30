@@ -69,7 +69,7 @@ def generate_video(score_path, metadata_path, video_path):
             frame_numbers = list(np.argwhere(summary == 1).reshape(1, -1).squeeze(0))
 
             vid_writer = cv2.VideoWriter(
-                'custom_video/summarized/' + video_name,
+                'output_video/' + video_name,
                 cv2.VideoWriter_fourcc(*'MP4V'),
                 fps,
                 (frame_width, frame_height)
@@ -95,20 +95,20 @@ def generate_video(score_path, metadata_path, video_path):
                     summarized_audio += audio_reader[audio_start_idx:audio_end_idx]
 
             # write audio to file
-            summarized_audio.export('custom_video/summarized/' + audio_name, format='mp3')
+            summarized_audio.export('output_video/' + audio_name, format='mp3')
 
             vid_writer.release()
 
             # combine video and audio
-            input_video = mpe.VideoFileClip('custom_video/summarized/' + video_name)
-            input_audio = mpe.AudioFileClip('custom_video/summarized/' + audio_name)
+            input_video = mpe.VideoFileClip('output_video/' + video_name)
+            input_audio = mpe.AudioFileClip('output_video/' + audio_name)
 
             output_video = input_video.set_audio(input_audio)
             output_video.write_videofile(
-                'custom_video/summarized/fin_' + video_name,
+                'output_video/fin_' + video_name,
                 codec='libx264',
                 audio_codec='aac',
             )
 
-            os.remove('custom_video/summarized/' + video_name)
-            os.remove('custom_video/summarized/' + audio_name)
+            os.remove('output_video/' + video_name)
+            os.remove('output_video/' + audio_name)

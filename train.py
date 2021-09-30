@@ -1,6 +1,6 @@
-from model.configs import get_config
-from model.data_loader import get_loader, get_loader_custom_video_data
-from model.solver import Solver
+from video_summary.configs import get_config
+from video_summary.data_loader import get_loader, get_loader_custom_video_data
+from video_summary.solver import Solver
 
 from feature_extraction.generate_dataset import GenerateDataset
 import sys
@@ -11,7 +11,7 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         # parse
         video_path = sys.argv[1].strip()
-        save_path = 'data/custom/custom_video.h5'
+        save_path = 'output_feature/output_feature.h5'
 
         # feature extraction
         gen_data = GenerateDataset(video_path, save_path)

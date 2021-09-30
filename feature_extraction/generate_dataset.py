@@ -86,7 +86,7 @@ class GenerateDataset:
         convert from video file (mp4) to h5 file with the right format
         '''
 
-        for video_idx, video_filename in enumerate(tqdm(self.video_list)):
+        for video_idx, video_filename in enumerate(tqdm(self.video_list, desc='Feature Extract', ncols=80, leave=True)):
             video_path = video_filename
             if os.path.isdir(self.video_path):
                 video_path = os.path.join(self.video_path, video_filename)
