@@ -102,19 +102,23 @@ class GenerateDataset:
             picks = []
             video_feat = None
 
-            for frame_idx in range(0, n_frames, 15):    # downsampling (to 2fps in case fps = 30)
-                frame = vr[frame_idx].asnumpy()
+            change_points, n_frame_per_seg = self.get_change_points(video_path)
+
+            # each change point is a small sequence of similar frames,
+            # we just need to take 1 frame from that segment
+            # for representing the main features of the whole segment
+            for segment in change_points:
+                mid = (segment[0] + segment[1])//2
+                frame = vr[mid].asnumpy()
 
                 frame_feat = self.extract_feature(frame)
 
-                picks.append(frame_idx)
+                picks.append(mid)
 
                 if video_feat is None:
                     video_feat = frame_feat
                 else:
                     video_feat = np.vstack((video_feat, frame_feat))
-                
-            change_points, n_frame_per_seg = self.get_change_points(video_path)
 
             self.h5_file['video_{}'.format(video_idx + 1)]['features'] = list(video_feat)
             self.h5_file['video_{}'.format(video_idx + 1)]['picks'] = np.array(list(picks))
