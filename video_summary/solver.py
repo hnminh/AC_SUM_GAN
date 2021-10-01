@@ -564,7 +564,7 @@ class Solver(object):
 
         out_dict = {}
 
-        for image_features, video_name, action_fragments in tqdm(self.test_loader, desc='Evaluate', ncols=80, leave=False):
+        for image_features, video_name, action_fragments in tqdm(self.test_loader, desc='Evaluate', ncols=80, leave=True):
             # [seq_len, batch_size=1, input_size]
             image_features = image_features.view(-1, self.config.input_size)
             image_features_ = Variable(image_features).to(device=device)

@@ -29,9 +29,9 @@ def generate_video(score_path, metadata_path, video_path):
         for video_key in keys:
             video_index = video_key[6:]
             
-            sb = np.array( hdf.get('video_' + video_index + '/change_points') )
-            n_frames = np.array( hdf.get('video_' + video_index + '/n_frames') )
-            positions = np.array( hdf.get('video_' + video_index + '/picks') )
+            sb = np.array(hdf.get('video_' + video_index + '/change_points'))
+            n_frames = np.array(hdf.get('video_' + video_index + '/n_frames'))
+            positions = np.array(hdf.get('video_' + video_index + '/picks'))
 
             all_shot_bound.append(sb)
             all_nframes.append(n_frames)
