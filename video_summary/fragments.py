@@ -43,8 +43,14 @@ def compute_fragments(seq_len, action_state_size):
     # action_fragments[i, 1] is ending point
     for i in range(action_state_size - 1):
         action_fragments[i, 1] = torch.tensor(sum(frag_jump[0:i + 1]) - 1)
+        # ensure that the end point will not smaller than start point
+        if action_fragments[i, 1] < action_fragments[i, 0]:
+            action_fragments[i, 1] = action_fragments[i, 0]
         action_fragments[i + 1, 0] = torch.tensor(sum(frag_jump[0:i + 1]))
+    # last fragment
     action_fragments[action_state_size - 1, 1] = torch.tensor(sum(frag_jump) - 1)
+    if action_fragments[action_state_size - 1, 1] < action_fragments[action_state_size - 1, 0]:
+        action_fragments[action_state_size - 1, 1] = action_fragments[action_state_size - 1, 0]
 
     return action_fragments
 
