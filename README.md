@@ -2,6 +2,7 @@
 
 ## PyTorch Implementation of AC-SUM-GAN
 - From **"AC-SUM-GAN: Connecting Actor-Critic and Generative Adversarial Networks for Unsupervised Video Summarization"** (IEEE Transactions on Circuits and Systems for Video Technology (IEEE TCSVT 2020), Early Access)
+- This project improves the workflow and refactors the code, which significantly reduces the processing time (compared to KTS Algorithm), and simplifies the work of video summarization
 - Reimplemented by Minh Hoang
 
 ## Dependency
